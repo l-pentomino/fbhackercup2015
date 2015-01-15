@@ -2,7 +2,6 @@ package contests.fb2015.q01;
 /*
  Facebook Hacker Cup 2015 Qualification Round
  Problem 1: Cooking the Books
- author: Galina Khayut
  Date: 01/09/2015
  */
 
@@ -14,85 +13,92 @@ import java.util.Scanner;
 
 public class Books {
 
-    static String[] minMax(String s) {
+    static String[] minMax(String s, int radix) {
+        char[] ch = s.toCharArray();
+
+        char[] minString = Arrays.copyOf(ch, ch.length);
+        char[] maxString = Arrays.copyOf(ch, ch.length);
+
+        for (int i = 0; i < minString.length - 1; i++) {
+            int minPos = i;
+            int localMin = minString[i] - '0';
+            for (int j = i + 1; j < minString.length; j++) {
+               int digit = minString[j] - '0';
+               if (digit <= localMin) {
+                   if (i == 0 && digit == 0) continue;
+                   localMin = digit;
+                   minPos = j;
+               }
+            }
+            if (minPos != i && localMin != minString[i] - '0') {
+                swap(minString, i, minPos);
+                break;
+            }
+        }
+
+        for (int i = 0; i < maxString.length -1; i++) {
+            int minPos = i;
+            int localMin = maxString[i] - '0';
+            for (int j = i + 1; j < maxString.length; j++) {
+                int digit = maxString[j] - '0';
+                if (digit >= localMin) {
+                    localMin = digit;
+                    minPos = j;
+                }
+            }
+            if (minPos != i && localMin != maxString[i] - '0') {
+                swap(maxString, i, minPos);
+                break;
+            }
+        }
         String[] result = new String[2];
-        result[0] = result[1] = s;
-
-        /* Sort the digits - ascending order gives the minimal value */
-        char[] sorted = Arrays.copyOf(s.toCharArray(), s.length());
-        Arrays.sort(sorted);
-
-        boolean doneMin, doneMax; doneMin = doneMax = false;
-
-        /* Compare actual digits positions to their respective min/max permutations.
-        Swap accordingly in order of significance */
-        for (int i = 0; !(doneMin && doneMax) && i < s.length(); i++) {
-            int c = s.charAt(i) - '0';
-            if (!doneMin) {
-                if (c > sorted[i] - '0') {
-                    int swapIndex = findNextMin(s, i + 1);
-                    if (swapIndex != i) {
-                        result[0] = swap(s, i, swapIndex);
-                        doneMin = true;
-                    }
-                }
-            }
-            if (!doneMax) {
-                if (c < sorted[sorted.length - i -1] - '0') {
-                    int swapIndex = findNextMax(s, i + 1);
-                    if (swapIndex != i) {
-                        result[1] = swap(s, i, swapIndex);
-                        doneMax = true;
-                    }
-                }
-            }
-        }
+        result[0] = String.valueOf(minString);
+        result[1] = String.valueOf(maxString);
         return result;
     }
 
-    /* In case there are duplicates of the minimal digit, get its rightmost index
-    * (so the greater digit is swapped to the least significant position) */
-    static int findNextMin(String s, int startFrom) {
-        int result = startFrom - 1;
-        int startChar = s.charAt(result) - '0';
-        int min = startChar;
-        for (int i = startFrom; i < s.length(); i++) {
-            int c = s.charAt(i) - '0';
-            if (c <= min && c != startChar) {
-                //skip if the first position is 0
-                if (c == 0 && startFrom == 1) continue;
-                min = c;
-                result = i;
-            }
-        }
-        return result;
-    }
-
-    /* Find the rightmost occurrence of the maximal digit */
-    static int findNextMax(String s, int startFrom) {
-        int result = startFrom - 1;
-        int startChar = s.charAt(result) - '0';
-        int max = startChar;
-        for (int i = startFrom; i < s.length(); i++) {
-            int c = s.charAt(i) - '0';
-            if (c >= max & c != startChar) {
-                max = c;
-                result = i;
-            }
-        }
-        return result;
-    }
-
-    private static String swap(String input, int pos1, int pos2) {
-        if (pos1 < 0 || pos1 == pos2) return input;
-        char[] chars = Arrays.copyOf(input.toCharArray(), input.length());
-        char tmp = chars[pos1];
-        chars[pos1] = chars[pos2];
-        chars[pos2] = tmp;
-        return String.valueOf(chars);
+    private static void swap(char[] arr, int i, int j) {
+        char tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
     }
 
     public static void main(String[] args) throws Exception {
+        testmain(args);
+        //test();
+    }
+
+    static void test() {
+        String in = "100\n" +
+                                "31524\n" +
+                                "897\n" +
+                                "123\n" +
+                                "10\n" +
+                                "5\n" +
+                                "999999999\n" +
+                                "0\n" +
+                                "10\n" +
+                                "9990999\n" +
+                                "939214502\n" +
+                                "773452111\n" +
+                                "223456093\n" +
+                                "604231672\n" +
+                                "857412048\n" +
+                                "287689159\n" +
+                                "422931895\n" +
+                                "728154034\n" +
+                                "926288077\n" +
+                                "380045176\n" +
+                                "869841756\n" +
+                                "472956328\n";
+        String[] s = in.split("\\n");
+        for (String amt : s) {
+            String[] mm = minMax(amt, 10);
+            System.out.println(amt + ": " + mm[0] + "/ " + mm[1]);
+        }
+    }
+
+    static void testmain(String[] args) throws Exception {
         if (args.length == 0) {
             System.out.println("Must provide input file name as the first argument");
             System.out.println(System.getProperty("user.dir"));
@@ -106,20 +112,18 @@ public class Books {
 
         Scanner sc = new Scanner(inputFile);
 
-        int entries = 0;
+        int entries = 1;
+        sc.nextLine();
         while (sc.hasNextLine()) {
-            //skip first line
-            if (entries == 0) {
-                entries = 1;
-                continue;
-            }
             String amount = sc.nextLine().trim();
 
-            String[] minMax = minMax(amount);
+            String[] mm = minMax(amount,10);
 
-            String s = String.format("Case #%d: %s %s", entries++, minMax[0], minMax[1]);
+
+            String s = String.format("Case #%d: %s %s", entries++, mm[0], mm[1]);
             pw.println(s);
-            System.out.println(s);
+            System.out.println("Entry " + entries + " " + amount + ": " + mm[0] + " / " + mm[1]);
+
         }
         sc.close();
         pw.close();

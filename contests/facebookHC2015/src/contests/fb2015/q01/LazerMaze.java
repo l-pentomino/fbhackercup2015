@@ -45,6 +45,7 @@ public class LazerMaze {
         String result = "";
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[y].length; x++) {
+                //"turn" the lazers based on the number of steps made
                 if (board[y][x] instanceof Lazer) {
                     int dir = (((Lazer) board[y][x]).direction + currentState.lazerState()) % 4;
                     switch(dir) {
@@ -55,14 +56,12 @@ public class LazerMaze {
                     }
                     continue;
                 }
-                String space = " ";
+                String out = board[y][x].c + "";
+                //mark the current position with brackets
                 if (currentState.cell.equals(board[y][x])) {
-                    result += "[";
-                    space = "";
-                }
-                result += space + board[y][x].c;
-                if (currentState.cell.equals(board[y][x])) result += "]";
-
+                    out = "[" + out + "]";
+                } else out = ' ' + out;
+                result += out;
             }
             result += "\n";
         }
@@ -98,7 +97,8 @@ public class LazerMaze {
         }
     }
 
-    //Exhaustive DFS seatch using a stack. Remembers minimal number of steps from all solutions
+    //Exhaustive DFS seatch using a stack.
+    //Remembers minimal number of steps from all possible solutions
     private void solve(MazeState start) {
         Stack<MazeState> path = new Stack<MazeState>();
         path.push(start);
@@ -304,10 +304,10 @@ public class LazerMaze {
 }
 
 class Cell {
-    int x;
-    int y;
-    char c;
-    boolean isEmpty;
+    final int x;
+    final int y;
+    final char c;
+    final boolean isEmpty;
 
     public Cell(char c, int x, int y, boolean isEmpty) {
         this.c = c;
@@ -329,7 +329,7 @@ class Cell {
 }
 
 class Lazer extends Cell{
-    int direction;
+    final int direction;
     public Lazer(char c, int x, int y,  int p) {
         super(c, x, y, false);
         direction = p;
@@ -337,8 +337,8 @@ class Lazer extends Cell{
 }
 
 class MazeState {
-    Cell cell;
-    int steps;
+    final Cell cell;
+    final int steps;
 
     public MazeState(Cell c, int s) {
         cell = c;
