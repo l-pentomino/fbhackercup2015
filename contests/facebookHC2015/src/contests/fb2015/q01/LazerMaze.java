@@ -8,7 +8,6 @@ import java.util.*;
 /*
  Facebook Hacker Cup 2015 Qualification Round
  Problem 3: Lazer Maze
- author: Galina Khayut
  Date: 01/09/2015
 */
 
@@ -110,22 +109,13 @@ public class LazerMaze {
             MazeState state = path.pop();
             currentState = state;
             makeMove(state);
-
-            System.out.println("\nExploring cell " + state.cell.x + "," + state.cell.y);
-            System.out.println("Steps made in this state: " + state.steps);
-            System.out.println("" + this);
-
             if (state.cell.equals(end)) {
-                System.out.println("\tFinished in " + state.steps + " steps");
                 if (state.steps < min) {
                     min = state.steps;
                     possible = true;
                 }
             }
             MazeState[] validMoves = validMoves(state);
-            if (validMoves.length == 0 && !state.cell.equals(end)) {
-                System.out.println("Dead end at " + state.cell + "\n");
-            }
             for (MazeState move : validMoves) {
                 if (move != null) {
                     path.push(move);
@@ -144,11 +134,9 @@ public class LazerMaze {
         for (int y = -1; y < 2; y++) {
             if (y != 0) {
                 int cy = c.y + y;
-                System.out.println("Checking " + board[cy][c.x]);
                 if (isValid(c.x, cy, newSteps)){
                     MazeState newState = new MazeState(board[cy][c.x], newSteps);
                     r.add(newState);
-                    System.out.println(newState + " is available");
                 }
             }
         }
@@ -156,11 +144,9 @@ public class LazerMaze {
         for (int x = -1; x < 2; x++) {
             if (x != 0) {
                 int cx = c.x + x;
-                System.out.println("Checking " + board[c.y][cx]);
                 if (isValid(cx, c.y, newSteps)) {
                     MazeState newState = new MazeState(board[c.y][cx], newSteps);
                     r.add(newState);
-                    System.out.println(newState + " is available");
                 }
             }
         }
@@ -179,8 +165,6 @@ public class LazerMaze {
                 //direction of the lazer if we are to make a step
                 int direction = (l.direction + state.lazerState()) % 4;
                 if (direction == relativePosition(cell, l)) {
-                    Cell ce = state.cell;
-                    System.out.println("Cell " + ce + " is vulnerable to " + l);
                     return true;
                 }
             }
@@ -202,7 +186,6 @@ public class LazerMaze {
         //Otherwise, mark position as unavailable.
         MazeState previous = visited.get(state);
         if (previous != null) {
-            System.out.println("Move " + xy + " has already been made");
             if (previous.steps > state.steps) visited.put(state, state);
             else return false;
 
@@ -296,7 +279,9 @@ public class LazerMaze {
         }
 
         for (int x = 0; x < inputs.size(); x++) {
-            if (x != Integer.parseInt(args[1])) continue;
+            if (args.length > 1) {
+                if (x != Integer.parseInt(args[1])) continue;
+            }
             List<String> maze = inputs.get(x);
             System.out.println("Solving case " + (x+1));
             LazerMaze lazerMaze = new LazerMaze(maze.size(), maze.get(0).length(), maze);
@@ -369,12 +354,10 @@ class MazeState {
     public boolean equals (Object o) {
         if (!(o instanceof MazeState)) return false;
         MazeState m = (MazeState) o;
-        //return hashCode() == m.hashCode();
         return (cell.x == m.cell.x && cell.y == m.cell.y && lazerState() == m.lazerState());
     }
 
     public int hashCode() {
-        //return cell.x * 100 + cell.y * 10 + lazerState();
         return ("#"+ cell.x + "#" + cell.y +  "#" + lazerState()).hashCode();
     }
 

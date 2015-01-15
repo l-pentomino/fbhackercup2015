@@ -2,7 +2,6 @@ package contests.fb2015.q01;
 /*
  Facebook Hacker Cup 2015 Qualification Round
  Problem 2: New Year Resolution
- author: Galina Khayut
  Date: 01/09/2015
  */
 
@@ -12,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class NYResolution {
+
     static class Meal {
         int proteins;
         int carbs;
@@ -110,14 +110,14 @@ public class NYResolution {
         for (int i = 1; i < Math.pow(2, total); i++) {
             String s = Integer.toBinaryString(i);
             String newS = "";
+            //left-pad with zeros
             for (int j = 0; j < total - s.length(); j++)
-                newS += "0";
+                newS += '0';
             s = newS + s;
+
             Meal m = new Meal();
             char[] arr = s.toCharArray();
             System.out.println(s);
-            //for (int a : arr)
-            //    System.out.print(a);
             System.out.println();
             in:for (int j = 0; j < arr.length; j++) {
                 if (arr[j]  == '1') {
@@ -132,51 +132,14 @@ public class NYResolution {
             }
             if (m.proteins == c.target.proteins && m.carbs == c.target.carbs
                             && m.fats == c.target.fats) {
-                show(s, c);
                 return true;
             }
         }
         return false;
     }
 
-    static boolean subsetSum(int sum, int n, List<Integer> ints, int depth) {
-        print(manyChar(' ', depth), sum, n);
-        if (sum == 0) return true;
-        if (sum != 0 && n == -1) return false;
-        if (sum < ints.get(n)) return subsetSum(sum, n - 1, ints, depth + 1);
-        else return subsetSum(sum, n - 1, ints, depth + 1) || subsetSum(sum - ints.get(n), n - 1, ints, depth + 1);
-    }
-
-    static void print(Object... obj) {
-        for (Object o : obj)
-            System.out.print(o + " ");
-        System.out.println();
-    }
-
-    static String manyChar(char c, int n) {
-        String s = "";
-        for (int i=0; i<n; i++)
-            s += c;
-        return s;
-    }
-
-    static void show(String binary, Case c) {
-        int total = c.meals.size();
-        System.out.println("POssible combination:");
-        for (int i = 0; i < binary.length(); i++) {
-            if (binary.charAt(i) - '0' == 1)
-                System.out.println("\t\t" + c.meals.get(total - i - 1));
-        }
-    }
-
     public static void main(String[] args) throws Exception {
-        Integer[] arr = {13, 20, 24, 56, 78, 23};
-       System.out.println(subsetSum(57, arr.length - 1, Arrays.asList(arr), 0));
-        Object[] a = new Object[4];
-        for ( Object o : a) {
-            if (o == null) System.out.println(o);
-        }
-     //   testmain(args);
+         testmain(args);
     }
 
     static void testmain(String[] args) throws Exception {
