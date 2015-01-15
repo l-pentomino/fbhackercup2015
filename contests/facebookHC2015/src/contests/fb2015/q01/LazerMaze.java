@@ -355,10 +355,12 @@ class MazeState {
         return (cell.x == m.cell.x && cell.y == m.cell.y && lazerState() == m.lazerState());
     }
 
+    @Override
     public int hashCode() {
         return ("#"+ cell.x + "#" + cell.y +  "#" + lazerState()).hashCode();
     }
 
+    @Override
     public String toString() {
         return String.format("{%d,%d}", cell.y, cell.x);
     }
