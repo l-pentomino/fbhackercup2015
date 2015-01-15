@@ -69,8 +69,6 @@ public class LazerMaze {
         return result;
     }
 
-
-
     //Initialize new maze from the input
     private void init(int h, int w, List<String> input) {
         visited = new HashMap<MazeState, MazeState>();
