@@ -65,38 +65,7 @@ public class Books {
 
     public static void main(String[] args) throws Exception {
         testmain(args);
-        //test();
-    }
-
-    static void test() {
-        String in = "100\n" +
-                                "31524\n" +
-                                "897\n" +
-                                "123\n" +
-                                "10\n" +
-                                "5\n" +
-                                "999999999\n" +
-                                "0\n" +
-                                "10\n" +
-                                "9990999\n" +
-                                "939214502\n" +
-                                "773452111\n" +
-                                "223456093\n" +
-                                "604231672\n" +
-                                "857412048\n" +
-                                "287689159\n" +
-                                "422931895\n" +
-                                "728154034\n" +
-                                "926288077\n" +
-                                "380045176\n" +
-                                "869841756\n" +
-                                "472956328\n";
-        String[] s = in.split("\\n");
-        for (String amt : s) {
-            String[] mm = minMax(amt, 10);
-            System.out.println(amt + ": " + mm[0] + "/ " + mm[1]);
-        }
-    }
+     }
 
     static void testmain(String[] args) throws Exception {
         if (args.length == 0) {

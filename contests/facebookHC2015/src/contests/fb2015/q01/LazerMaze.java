@@ -30,6 +30,7 @@ public class LazerMaze {
 
     public LazerMaze(int height, int width, List<String> input) {
         init(height, width, input);
+
     }
 
     public int solveMe() {
